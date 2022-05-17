@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace Picking
+namespace Picking.Locks
 {
     // 鍵の基底クラスです。
     public abstract class LockBase : MonoBehaviour
     {
         public abstract bool Unlocked { get; }
 
-        public virtual Director Director { protected get; set; }
+        public virtual Director DirectorSetter { protected get; set; }
 
         // 手の位置から開錠を試みます。
         public abstract void TryUnlock(Vector2 left, Vector2 right);

@@ -1,23 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 namespace Picking.Locks
 {
     // 南京錠の開錠状態を保持します。
-    public sealed class Padlock : LockBase
+    public class DialLock : LockBase
     {
-        [System.Serializable]
-        public class Data
-        {
-            public Circle left = new Circle();
-            public Circle right = new Circle();
-            public float time = 0.0f;
-        }
-
-
-        public override bool Unlocked => phaze >= datas.Count;
+        public override bool Unlocked => phaze >= angles.Count;
 
         public void Initialize()
         {
@@ -30,17 +20,20 @@ namespace Picking.Locks
             if (Unlocked)
                 return;
 
-            var leftHit = datas[phaze].left.IsHit(left);
-            var rightHit = datas[phaze].right.IsHit(right);
+            var angle = Mathf.Atan2(-right.x, -right.y) * Mathf.Rad2Deg + 180.0f;
 
-            if (leftHit && rightHit)
+            var distance = Mathf.Min(Mathf.Abs(angles[phaze] - angle), Mathf.Abs(360.0f - Mathf.Abs(angles[phaze] - angle)));
+
+            if (distance <= hitDistance)
             {
-                DirectorSetter.Left = DirectorSetter.Right = vibrationHit;
-
                 unlockTime += Time.deltaTime;
-                if (unlockTime >= datas[phaze].time)
+                if (unlockTime < time)
                 {
-                    DirectorSetter.Left = DirectorSetter.Right = 0.0f;
+                    DirectorSetter.Right = vibrationHit;
+                }
+                else
+                {
+                    DirectorSetter.Right = 0.0f;
                     DirectorSetter.ScheduleLeft(vibrationUnlock, 0.1f);
                     DirectorSetter.ScheduleRight(vibrationUnlock, 0.1f);
                     unlockTime = 0.0f;
@@ -49,24 +42,27 @@ namespace Picking.Locks
             }
             else
             {
-                DirectorSetter.Left = DirectorSetter.Right = 0.0f;
-
-                if (leftHit)
-                    DirectorSetter.Left = vibrationNear;
-                else if (rightHit)
-                    DirectorSetter.Right = vibrationNear;
-
                 unlockTime = Mathf.Max(unlockTime - Time.deltaTime, 0.0f);
+                var vibrationRate = (vibrationDistance - distance) / vibrationDistance;
+                DirectorSetter.Right = (vibrationRate > 0.0f) ? vibrationRate * (vibrationNearMax - vibrationNearMin) + vibrationNearMin : 0.0f;
             }
         }
 
 
-        [SerializeField][Header("各フェーズの開錠条件リスト")]
-        private List<Data> datas = new List<Data>();
+        [SerializeField][Header("各フェーズの開錠角度リスト（度数法）")]
+        private List<float> angles = new List<float>();
+        [SerializeField][Header("角度範囲")]
+        private float hitDistance = 3.0f;
+        [SerializeField][Header("ロック解除にかかる時間")]
+        private float time = 1.0f;
+        [SerializeField][Header("振動開始範囲")]
+        private float vibrationDistance = 15.0f;
         [SerializeField][Header("振動強度設定")]
-        private float vibrationNear = 0.2f;
+        private float vibrationNearMin = 0.05f;
         [SerializeField]
-        private float vibrationHit = 0.4f;
+        private float vibrationNearMax = 0.15f;
+        [SerializeField]
+        private float vibrationHit = 0.3f;
         [SerializeField]
         private float vibrationUnlock = 1.0f;
 
@@ -84,10 +80,10 @@ namespace Picking.Locks
             EditorApplication.playModeStateChanged +=
                 (state) =>
                 {
-                    // プレイモード開始前にフィールド未設定の警告を行います。
-                    if (state == PlayModeStateChange.ExitingEditMode)
+                        // プレイモード開始前にフィールド未設定の警告を行います。
+                        if (state == PlayModeStateChange.ExitingEditMode)
                     {
-                        var instances = FindObjectsOfType<Padlock>();
+                        var instances = FindObjectsOfType<DialLock>();
                         foreach (var instance in instances)
                         {
                             instance.WarnInvalidField();
@@ -99,8 +95,8 @@ namespace Picking.Locks
         // Serializeされたフィールドが不正な場合警告を行います。
         private void WarnInvalidField()
         {
-            if (datas.Count <= 0)
-                Debug.LogWarning($"{gameObject.name} の Datas が未設定です");
+            if (angles.Count <= 0)
+                Debug.LogWarning($"{gameObject.name} の Angles が未設定です");
         }
 #endif // UNITY_EDITOR
     }

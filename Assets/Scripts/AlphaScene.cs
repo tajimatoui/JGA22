@@ -2,6 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Picking.Locks;
 
 namespace Picking
 {
@@ -26,12 +27,13 @@ namespace Picking
             handsData.AdjustLeft = lockComponent.AdjustLeft;
             handsData.AdjustRight = lockComponent.AdjustRight;
 
-            lockComponent.Director = director;
+            lockComponent.DirectorSetter = director;
 
             director.onVibrate += (left, right) => Gamepad.current?.SetMotorSpeeds(left, right);
             director.onVibrate += cameraComponent.SetVibrate;
 
-            nearHumanData.OnFound = GameOver;
+            if (nearHumanData != null)
+                nearHumanData.OnFound = GameOver;
 
             door.StartClose();
         }
@@ -40,7 +42,7 @@ namespace Picking
         {
             lockComponent.TryUnlock(handsData.Left, handsData.Right);
             if (handsData.Left.sqrMagnitude > 0.0f || handsData.Right.sqrMagnitude > 0.0f)
-                nearHumanData.CheckAtAct();
+                nearHumanData?.CheckAtAct();
         }
 
         private void GameOver()

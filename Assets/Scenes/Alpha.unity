@@ -179,11 +179,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   handsData: {fileID: 970278621}
-  lockComponent: {fileID: 1411181499}
+  lockComponent: {fileID: 1465510325}
   director: {fileID: 321204124}
   cameraComponent: {fileID: 963194229}
   door: {fileID: 99297145}
-  nearHumanData: {fileID: 1018265604}
+  nearHumanData: {fileID: 0}
 --- !u!114 &321204124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,23 +611,24 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4725348309585210421, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6506187166334345290, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
       propertyPath: m_Name
       value: NearHuman
       objectReference: {fileID: 0}
+    - target: {fileID: 6506187166334345290, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7500630485516495063, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
---- !u!114 &1018265604 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7500630485516495063, guid: 5d94ec0415e82e9448ff191e87a09a78, type: 3}
-  m_PrefabInstance: {fileID: 1018265603}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac2a82b851cf0ea48ab5c1b1a7c75200, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1411181498
 GameObject:
   m_ObjectHideFlags: 0
@@ -644,7 +645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1411181499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +697,64 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1465510324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1465510326}
+  - component: {fileID: 1465510325}
+  m_Layer: 0
+  m_Name: DialLock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1465510325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465510324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ec25a5fe233baa45b7a3c7ed0bf0a4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angles:
+  - 135
+  - 45
+  - 225
+  - 315
+  hitDistance: 3
+  time: 1
+  vibrationDistance: 20
+  vibrationNearMin: 0.05
+  vibrationNearMax: 0.15
+  vibrationHit: 0.3
+  vibrationUnlock: 1
+  phaze: 0
+  unlockTime: 0
+--- !u!4 &1465510326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465510324}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.57946247, y: 2.2258768, z: -1.6447846}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1532366192
 PrefabInstance:
@@ -707,7 +765,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1640455880234905945, guid: 6f7989c63b5ada94ca26b6d03abf79f7, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1640455880234905945, guid: 6f7989c63b5ada94ca26b6d03abf79f7, type: 3}
       propertyPath: m_LocalPosition.x
